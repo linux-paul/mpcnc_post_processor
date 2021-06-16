@@ -1,14 +1,16 @@
 /*
 
-https://github.com/guffy1234/mpcnc_posts_processor
+https://github.com/MZachmann/mpcnc_post_processor
 
 MPCNC posts processor for milling and laser/plasma cutting.
+
+This is forked from https://github.com/flyfisher604/mpcnc_post_processor
 
 */
 
 description = "MPCNC Milling/Laser - Marlin 2.0, Grbl 1.1, RepRap";
-vendor = "flyfisher604";
-vendorUrl = "https://github.com/flyfisher604/mpcnc_post_processor";
+vendor = "mzachmann";
+vendorUrl = "https://github.com/MZachmann/mpcnc_post_processor";
 
 // Internal properties
 certificationLevel = 2;
@@ -131,8 +133,8 @@ properties = {
   cl8_cust_coolantBOn: "",          // Custom GCode command to turn on Coolant channel B
   cl9_cust_coolantBOff: "",         // Custom Gcode command to turn off Coolant channel B 
 
-  DuetMillingMode: "M453 P2 I0 R30000 F200", // GCode command to setup Duet3d milling mode
-  DuetLaserMode: "M452 P2 I0 R255 F200",     // GCode command to setup Duet3d laser mode
+  DuetMillingMode: ";M453 P2 I0 R30000 F200", // GCode command to setup Duet3d milling mode
+  DuetLaserMode: ";M452 P2 I0 R255 F200",     // GCode command to setup Duet3d laser mode
   
 };
 
