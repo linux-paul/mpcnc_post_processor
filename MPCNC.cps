@@ -83,7 +83,7 @@ properties = {
   job8_SeparateWordsWithSpace: true,     // specifies that the words should be separated with a white space 
   job9_GoOriginOnFinish: true,           // Go X0 Y0 current Z at end
 
-  fr0_TravelSpeedXY: 2500,             // High speed for travel movements X & Y (mm/min)
+  fr0_TravelSpeedXY: 1200,             // High speed for travel movements X & Y (mm/min)
   fr1_TravelSpeedZ: 300,               // High speed for travel movements Z (mm/min)
   fr2_EnforceFeedrate: true,          // Add feedrate to each movement line
   frA_ScaleFeedrate: false,            // Will feedrated be scaled
@@ -299,10 +299,10 @@ propertyDefinitions = {
   },
   cutter4_MarlinMode: {
     title: "Laser: Marlin/Reprap Mode", description: "Marlin/Reprap mode of the laser/plasma cutter", group: 6,
-    type: "integer", default_mm: 106, default_in: 106,
+    type: "integer", default_mm: 106, default_in: 1000,
     values: [
       { title: "Fan - M106 S{PWM}/M107", id: 106 },
-      { title: "Spindle - M3 O{PWM}/M5", id: 3 },
+      { title: "Spindle - M3 P0 O{PWM}/M5", id: 3 },
       { title: "Pin - M42 P{pin} S{PWM}", id: 42 },
     ]
   },
