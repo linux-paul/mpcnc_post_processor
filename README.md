@@ -1,3 +1,11 @@
+Fusion 360 CAM posts processor for MPCNC with Klipper
+====
+
+This mod just changes some GCODE output for using with klipper, e.g. https://github.com/linux-paul/klipper.
+M84 or G92 Z0 in the start sequence are pretty killers so i did some adaptions :)
+
+
+--- original part ---
 
 Fusion 360 CAM posts processor for MPCNC 
 ====

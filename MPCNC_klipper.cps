@@ -2,13 +2,13 @@
 
 https://github.com/guffy1234/mpcnc_posts_processor
 
-MPCNC posts processor for milling and laser/plasma cutting.
+MPCNC posts processor for milling and laser/plasma cutting depending to klipper purposes (Klipper MOD)
 
 */
 
-description = "MPCNC Milling/Laser - Marlin 2.0, Grbl 1.1, RepRap";
-vendor = "flyfisher604";
-vendorUrl = "https://github.com/flyfisher604/mpcnc_post_processor";
+description = "MPCNC Milling/Laser - Klipper 9.1, Grbl 1.1, RepRap";
+vendor = "linux-paul";
+vendorUrl = "https://github.com/linux-paul/mpcnc_post_processor";
 
 // Internal properties
 certificationLevel = 2;
@@ -19,17 +19,17 @@ capabilities = CAPABILITY_MILLING | CAPABILITY_JET;
 machineMode = undefined; //TYPE_MILLING, TYPE_JET
 
 var eFirmware = {
-    MARLIN: 0,
+    KLIPPER: 0,
     GRBL: 1,
     REPRAP: 2,
     prop: {
-      0: {name: "Marlin 2.x", value: 0},
+      0: {name: "KLIPPER 9.1", value: 0},
       1: {name: "Grbl 1.1", value: 1},
       2: {name: "RepRap", value: 2}
     }
   };
 
-var fw =  eFirmware.MARLIN; 
+var fw =  eFirmware.KLIPPER; 
 
 var eComment = {
     Off: 0,
@@ -115,8 +115,8 @@ properties = {
   cutter1_OnVaporize: 100,             // Percentage of power to turn on the laser/plasma cutter in vaporize mode
   cutter2_OnThrough: 80,               // Percentage of power to turn on the laser/plasma cutter in through mode
   cutter3_OnEtch: 40,                  // Percentage of power to turn on the laser/plasma cutter in etch mode
-  cutter4_MarlinMode: 106,             // Marlin mode laser/plasma cutter
-  cutter5_MarlinPin: 4,                // Marlin laser/plasma cutter pin for M42
+  cutter4_KlipperMode: 106,             // KLIPPER mode laser/plasma cutter
+  cutter5_KlipperPin: 4,                // KLIPPER laser/plasma cutter pin for M42
   cutter6_GrblMode: 4,                 // GRBL mode laser/plasma cutter
   cutter7_Coolant: eCoolant.Off,       // Use this coolant. F360 doesn't define a coolant for cutters
 
@@ -140,16 +140,16 @@ propertyDefinitions = {
 
   job0_SelectedFirmware: {
     title: "Job: CNC Firmware", description: "Dialect of GCode to create", group: 1,
-    type: "integer", default_mm: eFirmware.MARLIN, default_in: eFirmware.MARLIN,
+    type: "integer", default_mm: eFirmware.KLIPPER, default_in: eFirmware.KLIPPER,
     values: [
-      { title: eFirmware.prop[eFirmware.MARLIN].name, id: eFirmware.MARLIN },
+      { title: eFirmware.prop[eFirmware.KLIPPER].name, id: eFirmware.KLIPPER },
       { title: eFirmware.prop[eFirmware.GRBL].name, id: eFirmware.GRBL },
       { title: eFirmware.prop[eFirmware.REPRAP].name, id: eFirmware.REPRAP },
     ]
   },
 
   job1_SetOriginOnStart: {
-    title: "Job: Zero Starting Location (G92)", description: "On start set the current location as 0,0,0 (G92)", group: 1,
+    title: "Job: Zero Starting Location (G92)", description: "On start set the current location as 0,0 (G92)", group: 1,
     type: "boolean", default_mm: true, default_in: true
   },
   job2_ManualSpindlePowerControl: {
@@ -295,8 +295,8 @@ propertyDefinitions = {
     title: "Laser: On - Etch", description: "Persent of power to on the laser/plasma cutter in etch mode", group: 6,
     type: "number", default_mm: 40, default_in: 40
   },
-  cutter4_MarlinMode: {
-    title: "Laser: Marlin/Reprap Mode", description: "Marlin/Reprap mode of the laser/plasma cutter", group: 6,
+  cutter4_KlipperMode: {
+    title: "Laser: Klipper/Reprap Mode", description: "Klipper/Reprap mode of the laser/plasma cutter", group: 6,
     type: "integer", default_mm: 106, default_in: 106,
     values: [
       { title: "Fan - M106 S{PWM}/M107", id: 106 },
@@ -304,8 +304,8 @@ propertyDefinitions = {
       { title: "Pin - M42 P{pin} S{PWM}", id: 42 },
     ]
   },
-  cutter5_MarlinPin: {
-    title: "Laser: Marlin M42 Pin", description: "Marlin custom pin number for the laser/plasma cutter", group: 6,
+  cutter5_KlipperPin: {
+    title: "Laser: Klipper M42 Pin", description: "Klipper custom pin number for the laser/plasma cutter", group: 6,
     type: "integer", default_mm: 4, default_in: 4
   },
   cutter6_GrblMode: {
@@ -802,7 +802,7 @@ function laserOn(power) {
   else {
     var laser_pwm = power / 100 * 255;
 
-    switch (properties.cutter4_MarlinMode) {
+    switch (properties.cutter4_KlipperMode) {
       case 106:
         writeBlock(mFormat.format(106), sFormat.format(laser_pwm));
         break;
@@ -814,7 +814,7 @@ function laserOn(power) {
         }
         break;
       case 42:
-        writeBlock(mFormat.format(42), pFormat.format(properties.cutter5_MarlinPin), sFormat.format(laser_pwm));
+        writeBlock(mFormat.format(42), pFormat.format(properties.cutter5_KlipperPin), sFormat.format(laser_pwm));
         break;
     }
   }
@@ -828,7 +828,7 @@ function laserOff() {
 
   // Default
   else {
-    switch (properties.cutter4_MarlinMode) {
+    switch (properties.cutter4_KlipperMode) {
       case 106:
         writeBlock(mFormat.format(107));
         break;
@@ -836,7 +836,7 @@ function laserOff() {
         writeBlock(mFormat.format(5));
         break;
       case 42:
-        writeBlock(mFormat.format(42), pFormat.format(properties.cutter5_MarlinPin), sFormat.format(0));
+        writeBlock(mFormat.format(42), pFormat.format(properties.cutter5_KlipperPin), sFormat.format(0));
         break;
     }
   }
@@ -1604,10 +1604,11 @@ function Start() {
 
     writeBlock(gAbsIncModal.format(90)); // Set to Absolute Positioning
     writeBlock(gUnitModal.format(unit == IN ? 20 : 21)); // Set the units
-    writeBlock(mFormat.format(84), sFormat.format(0)); // Disable steppers timeout
+    display_text("Toolchange? resume with RESUME")
+    writeBlock("PAUSE"); // Disable steppers timeout
 
     if (properties.job1_SetOriginOnStart) {
-      writeBlock(gFormat.format(92), xFormat.format(0), yFormat.format(0), zFormat.format(0)); // Set origin to initial position
+      writeBlock(gFormat.format(92), xFormat.format(0), yFormat.format(0)); // Set origin to initial position
     }
 
     if (properties.probe1_OnStart && tool.number != 0 && !tool.isJetTool()) {
@@ -1677,7 +1678,7 @@ function display_text(txt) {
 
   // Default
   else {
-    writeBlock(mFormat.format(117), (properties.job8_SeparateWordsWithSpace ? "" : " ") + txt);
+    writeBlock(mFormat.format(118), (properties.job8_SeparateWordsWithSpace ? "" : " ") + txt);
   }
 }
 
@@ -1728,7 +1729,7 @@ function circular(clockwise, cx, cy, cz, x, y, z, feed) {
 
   // Default
   else {
-    // Marlin supports arcs only on XY plane
+    // Klipper supports arcs only on XY plane
     if (isFullCircle()) {
       if (isHelical()) {
         linearize(tolerance);
